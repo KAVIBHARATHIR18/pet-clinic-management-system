@@ -1,0 +1,520 @@
+<div class="app-container">
+
+  <header class="header">
+    <div>
+      <h1>🐾 Pet Clinic Management System</h1>
+      <p>Manage pets, owners, veterinarians and appointments</p>
+    </div>
+  </header>
+
+  <main class="dashboard">
+
+    <div class="welcome">
+      <h2>Welcome to Pet Clinic</h2>
+      <p>Connected to Spring Boot REST API</p>
+    </div>
+
+    <!-- DASHBOARD CARDS -->
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">👤</div>
+        <h3>Owners</h3>
+        <p>View registered pet owners</p>
+
+        <button
+          type="button"
+          (click)="scrollToSection('owners-section')">
+          View Owners
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">🐶</div>
+        <h3>Pets</h3>
+        <p>View registered pets</p>
+
+        <button
+          type="button"
+          (click)="scrollToSection('pets-section')">
+          View Pets
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">👨‍⚕️</div>
+        <h3>Veterinarians</h3>
+        <p>View available veterinarians</p>
+
+        <button
+          type="button"
+          (click)="scrollToSection('vets-section')">
+          View Vets
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">📅</div>
+        <h3>Appointments</h3>
+        <p>Manage pet appointments</p>
+
+        <button
+          type="button"
+          (click)="scrollToSection('appointments-section')">
+          View Appointments
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BOOK APPOINTMENT -->
+
+    <section class="booking-section">
+
+      <h2>📅 Book Pet Appointment</h2>
+
+      <div class="booking-form">
+
+        <div class="form-group">
+
+          <label for="pet">
+            Select Pet
+          </label>
+
+          <select
+            id="pet"
+            [(ngModel)]="selectedPetId">
+
+            <option [ngValue]="null">
+              -- Select Pet --
+            </option>
+
+            @for (pet of pets; track pet.petId) {
+
+              <option [ngValue]="pet.petId">
+                {{ pet.petName }} - {{ pet.species }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="vet">
+            Select Veterinarian
+          </label>
+
+          <select
+            id="vet"
+            [(ngModel)]="selectedVetId">
+
+            <option [ngValue]="null">
+              -- Select Veterinarian --
+            </option>
+
+            @for (vet of vets; track vet.vetId) {
+
+              <option [ngValue]="vet.vetId">
+                {{ vet.vetName }} - {{ vet.specialization }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="date">
+            Appointment Date
+          </label>
+
+          <input
+            id="date"
+            type="date"
+            [(ngModel)]="appointmentDate">
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="time">
+            Appointment Time
+          </label>
+
+          <input
+            id="time"
+            type="time"
+            [(ngModel)]="appointmentTime">
+
+        </div>
+
+        <div class="form-group full-width">
+
+          <label for="reason">
+            Reason
+          </label>
+
+          <textarea
+            id="reason"
+            rows="3"
+            placeholder="Enter reason for appointment"
+            [(ngModel)]="reason">
+          </textarea>
+
+        </div>
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="book-button"
+            (click)="bookAppointment()">
+            Book Appointment
+          </button>
+
+        </div>
+
+      </div>
+
+      @if (bookingMessage) {
+
+        <div class="success-message">
+          {{ bookingMessage }}
+        </div>
+
+      }
+
+      @if (bookingError) {
+
+        <div class="error-message">
+          {{ bookingError }}
+        </div>
+
+      }
+
+    </section>
+
+    <!-- OWNERS -->
+
+    <section
+      class="data-section"
+      id="owners-section">
+
+      <h2>👤 Registered Owners</h2>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (owner of owners; track owner.ownerId) {
+
+            <tr>
+              <td>{{ owner.ownerId }}</td>
+              <td>{{ owner.ownerName }}</td>
+              <td>{{ owner.phone }}</td>
+              <td>{{ owner.email }}</td>
+              <td>{{ owner.address }}</td>
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+    <!-- PETS -->
+
+    <section
+      class="data-section"
+      id="pets-section">
+
+      <h2>🐶 Registered Pets</h2>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Pet Name</th>
+            <th>Species</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Owner ID</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (pet of pets; track pet.petId) {
+
+            <tr>
+              <td>{{ pet.petId }}</td>
+              <td>{{ pet.petName }}</td>
+              <td>{{ pet.species }}</td>
+              <td>{{ pet.breed }}</td>
+              <td>{{ pet.age }}</td>
+              <td>{{ pet.ownerId }}</td>
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+    <!-- VETS -->
+
+    <section
+      class="data-section"
+      id="vets-section">
+
+      <h2>👨‍⚕️ Veterinarians</h2>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Phone</th>
+            <th>Consultation Fee</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (vet of vets; track vet.vetId) {
+
+            <tr>
+              <td>{{ vet.vetId }}</td>
+              <td>{{ vet.vetName }}</td>
+              <td>{{ vet.specialization }}</td>
+              <td>{{ vet.phone }}</td>
+              <td>₹{{ vet.consultationFee }}</td>
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+    <!-- MYSQL FUNCTION -->
+
+    <section
+      class="data-section function-section">
+
+      <h2>💰 Calculate Consultation Fee</h2>
+
+      <p class="section-description">
+        This feature uses a MySQL function to calculate the
+        consultation fee for the selected veterinarian.
+      </p>
+
+      <div class="fee-form">
+
+        <div class="form-group">
+
+          <label for="feeVet">
+            Select Veterinarian
+          </label>
+
+          <select
+            id="feeVet"
+            [(ngModel)]="feeVetId">
+
+            <option [ngValue]="null">
+              -- Select Veterinarian --
+            </option>
+
+            @for (vet of vets; track vet.vetId) {
+
+              <option [ngValue]="vet.vetId">
+                {{ vet.vetName }} - {{ vet.specialization }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+        <div class="fee-action">
+
+          <button
+            type="button"
+            class="fee-button"
+            (click)="calculateFee()">
+            Calculate Fee
+          </button>
+
+        </div>
+
+      </div>
+
+      @if (consultationFee !== null) {
+
+        <div class="fee-result">
+          Consultation Fee:
+          <strong>₹{{ consultationFee }}</strong>
+        </div>
+
+      }
+
+      @if (feeError) {
+
+        <div class="error-message">
+          {{ feeError }}
+        </div>
+
+      }
+
+    </section>
+
+    <!-- SUBQUERY -->
+
+    <section
+      class="data-section subquery-section">
+
+      <h2>📊 Vets with Above-Average Appointments</h2>
+
+      <p class="section-description">
+        This section uses a SQL subquery to find veterinarians
+        whose appointment count is above the average.
+      </p>
+
+      @if (aboveAverageVets.length > 0) {
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Vet ID</th>
+              <th>Veterinarian</th>
+              <th>Appointment Count</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            @for (vet of aboveAverageVets; track $index) {
+
+              <tr>
+                <td>{{ vet[0] }}</td>
+                <td>{{ vet[1] }}</td>
+                <td>{{ vet[2] }}</td>
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      } @else {
+
+        <div class="no-data">
+          No veterinarian currently has above-average appointments.
+        </div>
+
+      }
+
+    </section>
+
+    <!-- APPOINTMENTS -->
+
+    <section
+      class="data-section"
+      id="appointments-section">
+
+      <h2>📅 Appointments</h2>
+
+      <p class="section-description">
+        Appointment status is automatically determined by the
+        MySQL trigger when a new appointment is inserted.
+      </p>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Pet</th>
+            <th>Species</th>
+            <th>Owner</th>
+            <th>Veterinarian</th>
+            <th>Specialization</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (appointment of appointments; track $index) {
+
+            <tr>
+
+              <td>{{ appointment[0] }}</td>
+              <td>{{ appointment[1] }}</td>
+              <td>{{ appointment[2] }}</td>
+              <td>{{ appointment[3] }}</td>
+
+              <td>
+                {{ appointment[4] }}
+              </td>
+
+              <td>{{ appointment[5] }}</td>
+              <td>{{ appointment[6] }}</td>
+              <td>{{ appointment[7] }}</td>
+              <td>{{ appointment[8] }}</td>
+              <td>{{ appointment[9] }}</td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+
+</div>
