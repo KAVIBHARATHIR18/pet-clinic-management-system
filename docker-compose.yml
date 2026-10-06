@@ -1,0 +1,55 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: pet-clinic-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pet_clinic
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1 FROM pet_clinic.owners LIMIT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+
+    container_name: pet-clinic-backend
+
+    ports:
+      - "8081:8081"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: pet-clinic-frontend
+
+    ports:
+      - "4200:80"
+
+    depends_on:
+      - backend
+
+
+volumes:
+  mysql_data:
