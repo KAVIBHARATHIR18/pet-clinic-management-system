@@ -1,6 +1,11 @@
+
 CREATE DATABASE IF NOT EXISTS pet_clinic;
 
 USE pet_clinic;
+
+-- =========================================
+-- OWNERS TABLE
+-- =========================================
 
 CREATE TABLE IF NOT EXISTS owners (
     owner_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -9,6 +14,10 @@ CREATE TABLE IF NOT EXISTS owners (
     email VARCHAR(100),
     address VARCHAR(200)
 );
+
+-- =========================================
+-- PETS TABLE
+-- =========================================
 
 CREATE TABLE IF NOT EXISTS pets (
     pet_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -20,6 +29,10 @@ CREATE TABLE IF NOT EXISTS pets (
     FOREIGN KEY (owner_id) REFERENCES owners(owner_id)
 );
 
+-- =========================================
+-- VETS TABLE
+-- =========================================
+
 CREATE TABLE IF NOT EXISTS vets (
     vet_id INT PRIMARY KEY AUTO_INCREMENT,
     vet_name VARCHAR(100) NOT NULL,
@@ -27,6 +40,10 @@ CREATE TABLE IF NOT EXISTS vets (
     phone VARCHAR(15),
     consultation_fee DECIMAL(10,2)
 );
+
+-- =========================================
+-- APPOINTMENTS TABLE
+-- =========================================
 
 CREATE TABLE IF NOT EXISTS appointments (
     appointment_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -41,6 +58,10 @@ CREATE TABLE IF NOT EXISTS appointments (
     FOREIGN KEY (vet_id) REFERENCES vets(vet_id)
 );
 
+-- =========================================
+-- SAMPLE OWNERS
+-- =========================================
+
 INSERT INTO owners
 (owner_name, phone, email, address)
 VALUES
@@ -48,6 +69,10 @@ VALUES
 ('Arun Kumar', '9876501234', 'arun@gmail.com', 'Tambaram'),
 ('Priya Sharma', '9123456780', 'priya@gmail.com', 'Avadi'),
 ('Rahul Raj', '9988776655', 'rahul@gmail.com', 'Guindy');
+
+-- =========================================
+-- SAMPLE PETS
+-- =========================================
 
 INSERT INTO pets
 (pet_name, species, breed, age, owner_id)
@@ -58,6 +83,10 @@ VALUES
 ('Luna', 'Cat', 'Siamese', 1, 3),
 ('Max', 'Dog', 'Beagle', 4, 4);
 
+-- =========================================
+-- SAMPLE VETS
+-- =========================================
+
 INSERT INTO vets
 (vet_name, specialization, phone, consultation_fee)
 VALUES
@@ -65,6 +94,10 @@ VALUES
 ('Dr. Priya', 'Pet Surgery', '9000000002', 1000.00),
 ('Dr. Karthik', 'Dermatology', '9000000003', 750.00),
 ('Dr. Meena', 'General Veterinary', '9000000004', 600.00);
+
+-- =========================================
+-- TRIGGER
+-- =========================================
 
 DELIMITER //
 
@@ -81,6 +114,10 @@ END //
 
 DELIMITER ;
 
+-- =========================================
+-- SAMPLE APPOINTMENTS
+-- =========================================
+
 INSERT INTO appointments
 (pet_id, vet_id, appointment_date, appointment_time, reason, status, consultation_fee)
 VALUES
@@ -90,6 +127,10 @@ VALUES
 (4, 3, '2026-10-06', '12:00:00', 'Skin Allergy', 'BOOKED', 750.00),
 (5, 1, '2026-10-07', '09:30:00', 'General Checkup', 'BOOKED', 500.00),
 (1, 4, '2026-10-08', '11:30:00', 'Follow-up', 'BOOKED', 600.00);
+
+-- =========================================
+-- STORED PROCEDURE
+-- =========================================
 
 DELIMITER //
 
@@ -125,6 +166,10 @@ END //
 
 DELIMITER ;
 
+-- =========================================
+-- FUNCTION
+-- =========================================
+
 DELIMITER //
 
 CREATE FUNCTION CalculateConsultationFee(
@@ -144,3 +189,4 @@ BEGIN
 END //
 
 DELIMITER ;
+

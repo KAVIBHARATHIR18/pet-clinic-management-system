@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class PetClinic {
 
-  private baseUrl = 'http://localhost:8081/api';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
